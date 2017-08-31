@@ -4,6 +4,17 @@ import getMuiTheme        from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider   from 'material-ui/styles/MuiThemeProvider';
 import JSONP from 'jsonp';
 import YoutubeFinder from 'youtube-finder';
+import Chip from 'material-ui/Chip';
+
+const styles = {
+  chip: {
+    margin: 4
+  },
+  wrapper: {
+    display: 'flex',
+    flewWrap: 'wrap',
+  }
+}
 
 const googleAutoSuggestURL = `
   //suggestqueries.google.com/complete/search?client=youtube&ds=yt&q=`;
@@ -17,7 +28,7 @@ class Searching extends Component {
     this.state = {
       dataSource: [],
       inputValue: ''
-    }
+    };
   }
 
   onUpdateInput (inputValue) {
@@ -59,7 +70,7 @@ class Searching extends Component {
       part :'id,snippet',
       type: 'video',
       q: this.state.inputValue,
-      maxResults: '50'
+      maxResults: '4'
     }
 
     this.YoutubeClient.search(params, function(error, results) {
@@ -68,23 +79,35 @@ class Searching extends Component {
 
       self.setState({
         dataSource: [],
-        inputValue: ''
+        inputValue: self.state.inputValue
       });
     });
   }
 
+  // render () {
+  //   return (
+  //     <div style={this.styles.wrapper}>
+  //       {this.state.}
+  //     </div>
+  //   );
+  // }
+
 render () {
   return (
+
     <MuiThemeProvider muiTheme={getMuiTheme()}>
+    <div>
     <AutoComplete
       searchText={this.state.inputValue}
       hintText="legit2"
       openOnFocus={true}
-      dataSource = {this.state.dataSource}
-      onUpdateInput ={this.onUpdateInput}
-      onNewRequest = {this.onNewRequest}
+      dataSource={this.state.dataSource}
+      onUpdateInput={this.onUpdateInput}
+      onNewRequest={this.onNewRequest}
       fullWidth={true}
     />
+    <Chip style={styles.chip}> {this.state.inputValue} </Chip>
+   </div>
     </MuiThemeProvider>
 );
   }
