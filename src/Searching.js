@@ -5,6 +5,7 @@ import MuiThemeProvider   from 'material-ui/styles/MuiThemeProvider';
 import JSONP from 'jsonp';
 import YoutubeFinder from 'youtube-finder';
 import Chip from 'material-ui/Chip';
+import ChipInput from 'material-ui-chip-input'
 
 const styles = {
   chip: {
@@ -47,8 +48,11 @@ class Searching extends Component {
     url = googleAutoSuggestURL + this.state.inputValue;
 
     if (this.state.inputValue !== '') {
+
       JSONP (url, function(error, data) {
+
         let searchResults, retrievedSearchTerms;
+
         if (error) return error;
 
         searchResults = data[1];
@@ -82,6 +86,7 @@ class Searching extends Component {
         inputValue: self.state.inputValue
       });
     });
+
   }
 
   // render () {
@@ -98,7 +103,7 @@ render () {
     <MuiThemeProvider muiTheme={getMuiTheme()}>
     <div>
     <AutoComplete
-      searchText={this.state.inputValue}
+      // searchText={this.state.inputValue}
       hintText="legit2"
       openOnFocus={true}
       dataSource={this.state.dataSource}
@@ -107,6 +112,17 @@ render () {
       fullWidth={true}
     />
     <Chip style={styles.chip}> {this.state.inputValue} </Chip>
+    <br/>
+    <br/>
+    <ChipInput
+      searchText={this.state.inputValue}
+      fullWidth={true}
+      dataSource={this.state.dataSource}
+      onUpdateInput={this.onUpdateInput}
+      onChange={this.onNewRequest}
+
+    />
+
    </div>
     </MuiThemeProvider>
 );
