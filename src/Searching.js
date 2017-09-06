@@ -3,9 +3,10 @@ import { AutoComplete } from "material-ui";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import JSONP from "jsonp";
-import YoutubeFinder from "youtube-finder";
+// import YoutubeFinder from "youtube-finder";
 import Chip from "material-ui/Chip";
 import ChipInput from "material-ui-chip-input";
+import Profile from './components/Profile';
 
 const styles = {
   chip: {
@@ -20,12 +21,20 @@ const styles = {
 const googleAutoSuggestURL = `
   //suggestqueries.google.com/complete/search?client=youtube&ds=yt&q=`;
 
+
+// new system
+const APIk = 'AIzaSyA8cOPpMYBZuZUStD7YVLYi_sq2kVXgMYA'
+const result = 2
+const realURL = `https://www.googleapis.com/youtube/v3/search?part=id,snippet&type=video&maxResults=${result}&key=${APIk}`
+
+
 class Searching extends Component {
   constructor(props) {
     super(props);
     this.onUpdateInput = this.onUpdateInput.bind(this);
-    this.onNewRequest = this.onNewRequest.bind(this);
-    this.YoutubeClient = YoutubeFinder.createClient({ key: this.props.apiKey });
+    this.handleRequest = this.handleRequest.bind(this);
+    // this.onNewRequest = this.onNewRequest.bind(this);
+    // this.YoutubeClient = YoutubeFinder.createClient({ key: this.props.apiKey });
     this.state = {
       dataSource: [],
       inputValue: ""
@@ -68,25 +77,39 @@ class Searching extends Component {
     }
   }
 
-  onNewRequest(searchTerm) {
-    const self = this,
-      params = {
-        part: "id,snippet",
-        type: "video",
-        q: this.state.inputValue,
-        maxResults: "4"
-      };
-
-    this.YoutubeClient.search(params, function(error, results) {
-      if (error) return console.log(error);
-      self.props.callback(results.items, searchTerm);
-
-      self.setState({
-        dataSource: [],
-        inputValue: self.state.inputValue
-      });
-    });
+  handleRequest () {
+    fetch (realURL)
+      .then((response) => response.json())
+        .then((responseJson) => {
+          // console.log(responseJson)
+          const dataSource = responseJson.items.map(obj => obj.id.videoId);
+          this.setState({dataSource})
+          // console.log(this.state.dataSource)
+        })
+        .catch((error) => {
+          console.error(error);
+        })
   }
+
+  // onNewRequest(searchTerm) {
+  //   const self = this,
+  //     params = {
+  //       part: "id,snippet",
+  //       type: "video",
+  //       q: this.state.inputValue,
+  //       maxResults: "4"
+  //     };
+  //
+  //   this.YoutubeClient.search(params, function(error, results) {
+  //     if (error) return console.log(error);
+  //     self.props.callback(results.items, searchTerm);
+  //
+  //     self.setState({
+  //       dataSource: [],
+  //       inputValue: self.state.inputValue
+  //     });
+  //   });
+  // }
 
   // render () {
   //   return (
@@ -97,6 +120,8 @@ class Searching extends Component {
   // }
 
   render() {
+    // console.log(realURL)
+      //  console.log(this.state.dataSource)
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
         <div>
@@ -119,8 +144,19 @@ class Searching extends Component {
             fullWidth={true}
             dataSource={this.state.dataSource}
             onUpdateInput={this.onUpdateInput}
-            onChange={this.onNewRequest}
+            onChange={this.handleRequest}
           />
+          <br/>
+          <br/>
+          {
+            this.state.dataSource.map((link, i) => {
+              // console.log('mylink', link);
+              let application = <div key={i}>Title: <b>{link}</b></div>
+              return application
+            })
+          }
+          {this.application}
+
         </div>
       </MuiThemeProvider>
     );

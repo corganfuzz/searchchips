@@ -6,16 +6,17 @@ import Searching from "./Searching";
 injectTapEventPlugin();
 
 class App extends Component {
-  yourCallback(searchResults) {
-    console.log("searchResults are:", searchResults);
-  }
+
+  // yourCallback(searchResults) {
+  //   console.log("searchResults are:", searchResults);
+  // }
 
   render() {
     return (
       <div className="App">
         <Searching
-          apiKey="AIzaSyA8cOPpMYBZuZUStD7YVLYi_sq2kVXgMYA"
-          callback={this.yourCallback}
+          // apiKey="AIzaSyA8cOPpMYBZuZUStD7YVLYi_sq2kVXgMYA"
+          // callback={this.yourCallback}
         />
       </div>
     );
