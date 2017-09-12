@@ -7,6 +7,7 @@ import JSONP from "jsonp";
 import Chip from "material-ui/Chip";
 import ChipInput from "material-ui-chip-input";
 import Profile from './components/Profile';
+import Toggle from 'material-ui/Toggle';
 
 const styles = {
   chip: {
@@ -33,11 +34,13 @@ class Searching extends Component {
     super(props);
     this.onUpdateInput = this.onUpdateInput.bind(this);
     this.handleRequest = this.handleRequest.bind(this);
+    this.onToggle = this.onToggle.bind(this);
     // this.onNewRequest = this.onNewRequest.bind(this);
     // this.YoutubeClient = YoutubeFinder.createClient({ key: this.props.apiKey });
     this.state = {
       dataSource: [],
-      inputValue: ""
+      inputValue: "",
+      checked: false
     };
   }
 
@@ -58,7 +61,7 @@ class Searching extends Component {
     const self = this,
       url = googleAutoSuggestURL + this.state.inputValue;
 
-    if (this.state.inputValue !== "") {
+    if (this.state.inputValue !== '') {
       JSONP(url, function(error, data) {
         let searchResults, retrievedSearchTerms;
 
@@ -78,17 +81,32 @@ class Searching extends Component {
   }
 
   handleRequest () {
-    fetch (realURL)
+    const lastURL = `${realURL}&q=${this.state.inputValue}`;
+    // console.log ('lastURL', lastURL)
+    fetch (lastURL)
       .then((response) => response.json())
         .then((responseJson) => {
           // console.log(responseJson)
-          const dataSource = responseJson.items.map(obj => obj.id.videoId);
+          const dataSource = responseJson.items.map(obj => obj.snippet.channelTitle);
           this.setState({dataSource})
           // console.log(this.state.dataSource)
         })
         .catch((error) => {
           console.error(error);
         })
+  }
+
+  onToggle (e) {
+
+    this.setState({
+      checked: e.target.checked
+    });
+      console.log('yo', !this.state.checked);
+
+    // this.setState({
+    //   [state]: event.target.value
+    // });
+
   }
 
   // onNewRequest(searchTerm) {
@@ -146,6 +164,10 @@ class Searching extends Component {
             onUpdateInput={this.onUpdateInput}
             onChange={this.handleRequest}
           />
+          <br/>
+          <br/>
+          <Toggle onToggle={(e) => this.onToggle(e)} />
+
           <br/>
           <br/>
           {
