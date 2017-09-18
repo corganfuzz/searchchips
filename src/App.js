@@ -6,18 +6,45 @@ import Searching from "./Searching";
 injectTapEventPlugin();
 
 class App extends Component {
+  constructor(props){
+    super(props);
 
-  yourCallback(searchResults) {
-    console.log("searchResults are:", searchResults);
+    this.state = {
+      searchResults:''
+    }
+    this.yourCallback = this.yourCallback.bind(this);
   }
 
+  yourCallback(searchResults) {
+     this.setState({searchResults}) 
+     console.log("searchResults", searchResults);
+    }
+
   render() {
+
+
+
+  // console.log ('this.props', this.props)
     return (
       <div className="App">
         <Searching
-          // apiKey="AIzaSyA8cOPpMYBZuZUStD7YVLYi_sq2kVXgMYA"
            callback={this.yourCallback}
+
         />
+
+      <br/>
+
+      {this.state.searchResults 
+        ? 
+        this.state.searchResults.map((r, k) => 
+          <h1 key={k}>
+            {r.id.videoId}
+          </h1>) 
+        : null
+        }
+      
+
+
       </div>
     );
   }

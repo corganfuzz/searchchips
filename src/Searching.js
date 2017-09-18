@@ -7,18 +7,6 @@ import JSONP from "jsonp";
 // import Chip from "material-ui/Chip";
 import ChipInput from "material-ui-chip-input";
 
-// const styles = {
-//   chip: {
-//     margin: 4
-//   },
-//   wrapper: {
-//     display: "flex",
-//     flewWrap: "wrap"
-//   }
-// };
-
-
-
   const googleAutoSuggestURL = `
     //suggestqueries.google.com/complete/search?client=youtube&ds=yt&q=`;
   const APIk = 'AIzaSyA8cOPpMYBZuZUStD7YVLYi_sq2kVXgMYA'
@@ -86,7 +74,7 @@ class Searching extends Component {
       .then((response) => response.json())
         .then((results) => {
           // console.log('res', results.items)
-          // const dataSource = responseJson.items.map(obj => obj.snippet);
+          // const apps = results.items.map(obj => obj.id);
           self.props.callback(results.items, searchTerm)
           self.setState({
               dataSource: [],
@@ -101,32 +89,20 @@ class Searching extends Component {
 
 
   render() {
-    // console.log('bro', this.state.dataSource )
-    
+    // console.log (this.props)
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
         <div>
-          {/* <AutoComplete
-            // searchText={this.state.inputValue}
-            hintText="legit2"
-            openOnFocus={true}
-            dataSource={this.state.dataSource}
-            onUpdateInput={this.onUpdateInput}
-            onNewRequest={this.onNewRequest}
-            fullWidth={true}
-          />
-          <Chip style={styles.chip}>
-            {" "}{this.state.inputValue}{" "}
-          </Chip> */}
           <br />
           <br />
           <ChipInput
-            searchText={this.state.inputValue}
             fullWidth={true}
             dataSource={this.state.dataSource}
             onUpdateInput={this.onUpdateInput}
             onChange={this.onNewRequest}
           />
+
+          {/* <h3>apps: {this.state.apps}</h3> */}
         </div>
       </MuiThemeProvider>
     );
